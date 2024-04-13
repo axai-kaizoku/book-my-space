@@ -14,7 +14,7 @@ export const POST = async (request: any) => {
 	}
 
 	if (existingUserMobile) {
-		return new NextResponse('Mobile is already in use', { status: 400 });
+		return new NextResponse('Mobile is already in use', { status: 401 });
 	}
 
 	const hashPassword = await bcrypt.hash(password, 5);
