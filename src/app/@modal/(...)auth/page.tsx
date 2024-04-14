@@ -152,14 +152,14 @@ export default function ModalAuthentication() {
 										<li
 											className={`text-xl font-bold w-1/2 ${
 												isLogin ? 'bg-slate-600 text-slate-100' : ''
-											} p-2 rounded-xl text-center leading-tight tracking-tight text-gray-900 md:text-2xl `}
+											} p-2 rounded-xl text-center leading-tight tracking-tight text-gray-900 md:text-2xl hover:cursor-default`}
 											onClick={() => setIsLogin(true)}>
 											Login
 										</li>
 										<li
 											className={`text-xl font-bold w-1/2 ${
 												isLogin ? '' : 'bg-slate-600 text-slate-100'
-											} p-2 rounded-xl text-center leading-tight tracking-tight text-gray-900 md:text-2xl `}
+											} p-2 rounded-xl text-center leading-tight tracking-tight text-gray-900 md:text-2xl hover:cursor-default`}
 											onClick={() => setIsLogin(false)}>
 											Signup
 										</li>
