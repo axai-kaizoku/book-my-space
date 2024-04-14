@@ -8,7 +8,11 @@ export default function Header() {
 		<header>
 			<nav className="md:h-32 h-36 bg-white w-full flex items-center flex-col md:flex-row justify-between px-20 border-b-black border-b-2 shadow-xl">
 				<h2 className="text-3xl font-bold p-8 md:p-0">
-					<Link href="/">Book my Space.</Link>
+					<Link
+						href="/"
+						className="whitespace-nowrap">
+						Book my Space.
+					</Link>
 				</h2>
 				<div className="flex gap-4 mb-6 md:mb-0">
 					{session ? (

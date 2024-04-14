@@ -10,16 +10,14 @@ export const authOptions: AuthOptions = {
 			id: 'credentials',
 			name: 'Credentials',
 			credentials: {
-				mobile: { label: 'Mobile', type: 'text' },
 				email: { label: 'Email', type: 'text' },
 				password: { label: 'Password', type: 'password' },
 			},
 			async authorize(credentials: any) {
 				await connect();
 				try {
-					const user =
-						(await User.findOne({ email: credentials.email })) ||
-						(await User.findOne({ mobile: credentials.mobile }));
+					const user = await User.findOne({ email: credentials.email });
+
 					if (user) {
 						const isPasswordValid = await bcrypt.compare(
 							credentials.password,
