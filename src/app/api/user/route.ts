@@ -1,7 +1,6 @@
 import User from '@/models/User';
 import connect from '@/utils/database';
 import { getServerSession } from 'next-auth';
-import { NextResponse } from 'next/server';
 
 export async function GET(request: any) {
 	try {
