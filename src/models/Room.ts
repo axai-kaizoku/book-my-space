@@ -10,13 +10,14 @@ const roomSchema = new Schema(
 			default: 'AXAILDG-1122-2023',
 		},
 		roomNumber: {
-			type: Number,
+			type: String,
 			unique: true,
 			required: true,
 		},
 		roomType: {
 			type: String,
-			required: true,
+			default: 'Single',
+			enum: ['Single', 'Double'],
 		},
 		maxOccupancy: {
 			type: Number,

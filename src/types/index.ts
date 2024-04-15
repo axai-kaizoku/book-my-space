@@ -19,19 +19,21 @@ export interface CustomFormProps {
 	error: string;
 }
 
-export interface PostProps {
+export interface RoomProps {
 	_id: string;
-	id: string;
-	title: string;
-	content: string;
-	author: UserProps;
-	createdAt: string;
+	hotelId: string;
+	roomNumber: string;
+	roomType: string;
+	maxOccupancy: number;
+	pricePerNight: number;
+	isBooked: boolean;
 }
 
 export interface UserProps {
-	fname: string;
-	lname: string;
+	_id?: string;
+	name: string;
 	email: string;
+	mobile: string;
 	password: string;
 	isAdmin: boolean;
 	updatedAt: Date;

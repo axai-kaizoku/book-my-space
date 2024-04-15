@@ -21,14 +21,14 @@ export default async function DashboardLayout({
 	const userRole = await getUser();
 	const isAdmin = userRole.isAdmin;
 	return session && isAdmin ? (
-		<div>
+		<div className="w-full h-[80vh]">
 			{children}
 			<div className="w-full h-5/6 flex flex-row justify-center items-center">
-				<div className=" w-11/12 h-full flex flex-col sm:flex-row justify-between p-6">
-					<div className=" bg-slate-50 h-fit shadow-lg w-full p-3 rounded sm:w-3/5">
+				<div className=" w-11/12 h-full flex flex-col lg:flex-row justify-between p-6">
+					<div className=" bg-slate-50 h-fit shadow-lg w-full p-3 rounded lg:w-3/5">
 						{posts}
 					</div>
-					<div className=" bg-slate-50 h-fit shadow-lg w-full sm:w-1/3 p-3 rounded">
+					<div className=" bg-slate-50 h-fit shadow-lg w-full lg:w-1/3 p-3 rounded">
 						{users}
 					</div>
 				</div>

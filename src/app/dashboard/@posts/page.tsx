@@ -1,72 +1,275 @@
 'use client';
-// import DeleteBtn from '@/components/DeleteBtn';
 import { useEffect, useState } from 'react';
-import { PostProps } from '@/types';
 import { useRouter } from 'next/navigation';
 
 export default function Posts() {
 	const router = useRouter();
-	const [posts, setPosts] = useState([]);
+	const [loading, setLoading] = useState<boolean>(true);
+	const [bookingUi, setBookingUi] = useState<string>('recentBookings');
+	const [error, setError] = useState<string>('');
+	const [roomNumber, setRoomNubmer] = useState<string>('');
+	const [maxOccupancy, setmaxOccupancy] = useState<number | undefined>(2);
+	const [roomType, setRoomType] = useState<string | undefined>('Single');
+	const [pricePerNight, setPricePerNight] = useState<number>(1500);
 
-	const getAllPosts = async () => {
-		const response = await fetch('/api/flagged-posts');
-		const data = await response.json();
-		setPosts(data);
+	useEffect(() => {}, []);
+
+	const handleSubmit = async (e: any) => {
+		e.preventDefault();
+		console.log(roomNumber, maxOccupancy, roomType, pricePerNight);
 	};
-
-	const approvePost = async (id: string) => {
-		try {
-			const res = await fetch('/api/flagged-posts', {
-				method: 'PUT',
-				body: JSON.stringify({ id }),
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			});
-			if (res.status === 200) router.push('/');
-		} catch (error: any) {
-			console.log(error);
-		}
-	};
-
-	useEffect(() => {
-		getAllPosts();
-	}, []);
 	return (
 		<div>
-			<h1 className="text-xl font-bold">Posts</h1>
+			<h1 className="text-xl font-bold">Bookings</h1>
 			<div className="border rounded border-gray-600"></div>
-			<ul className="flex flex-col m-4">
-				{posts.length > 0 ? (
-					posts.map((post: PostProps) => (
+			<div className="flex flex-col">
+				{/* Buttons */}
+				<div className="flex gap-2 w-full border p-4  md:gap-6 rounded-lg mt-4">
+					<button
+						onClick={() => setBookingUi('recentBookings')}
+						className={`p-2  rounded-lg w-fit ${
+							bookingUi === 'recentBookings'
+								? 'bg-slate-800 text-slate-100'
+								: 'bg-slate-100 text-slate-800'
+						}`}>
+						Recent bookings
+					</button>
+					<button
+						onClick={() => setBookingUi('availableRooms')}
+						className={`p-2  rounded-lg w-fit ${
+							bookingUi === 'availableRooms'
+								? 'bg-slate-800 text-slate-100'
+								: 'bg-slate-100 text-slate-800'
+						}`}>
+						Available Rooms
+					</button>
+					<button
+						onClick={() => setBookingUi('addNewRoom')}
+						className={`p-2  rounded-lg w-fit ${
+							bookingUi === 'addNewRoom'
+								? 'bg-slate-800 text-slate-100'
+								: 'bg-slate-100 text-slate-800'
+						}`}>
+						Add new Room
+					</button>
+				</div>
+
+				{/* Recent Bookings */}
+				{bookingUi === 'recentBookings' && (
+					<ul className="w-full mt-2 overflow-y-auto max-h-[40vh]">
+						<li className="flex p-3 my-2 text-sm  justify-between border border-b-2 border-b-black rounded-lg items-center">
+							<p>Name</p>
+							<p>Nubmer</p>
+							<p>Email</p>
+							<p>Check In</p>
+							<p>Check Out</p>
+							<p>Price Paid</p>
+						</li>
+						<li className="flex p-3 my-2 text-sm justify-between border rounded-lg items-center">
+							<p>john</p>
+							<p>9391994502</p>
+							<p>demo@example.com</p>
+							<p>15-04-2024 | 15:00</p>
+							<p>16-04-2024 | 15:00</p>
+							<p>₹1600</p>
+						</li>
+						<li className="flex p-3 my-2 text-sm justify-between border rounded-lg items-center">
+							<p>john</p>
+							<p>9391994502</p>
+							<p>demo@example.com</p>
+							<p>15-04-2024 | 15:00</p>
+							<p>16-04-2024 | 15:00</p>
+							<p>₹1600</p>
+						</li>
+						<li className="flex p-3 my-2 text-sm justify-between border rounded-lg items-center">
+							<p>john</p>
+							<p>9391994502</p>
+							<p>demo@example.com</p>
+							<p>15-04-2024 | 15:00</p>
+							<p>16-04-2024 | 15:00</p>
+							<p>₹1600</p>
+						</li>
+						<li className="flex p-3 my-2 text-sm justify-between border rounded-lg items-center">
+							<p>john</p>
+							<p>9391994502</p>
+							<p>demo@example.com</p>
+							<p>15-04-2024 | 15:00</p>
+							<p>16-04-2024 | 15:00</p>
+							<p>₹1600</p>
+						</li>
+						<li className="flex p-3 my-2 text-sm justify-between border rounded-lg items-center">
+							<p>john</p>
+							<p>9391994502</p>
+							<p>demo@example.com</p>
+							<p>15-04-2024 | 15:00</p>
+							<p>16-04-2024 | 15:00</p>
+							<p>₹1600</p>
+						</li>
+					</ul>
+				)}
+				{/* Available Rooms */}
+				{bookingUi === 'availableRooms' && (
+					<ul className="w-full flex flex-wrap gap-5 mt-2 p-8 overflow-y-auto max-h-[40vh]">
 						<li
-							key={post._id}
-							className="py-2 px-1 rounded bg-slate-100 m-1 flex flex-row justify-between items-center">
-							<div className="w-4/5">
-								<div className="flex flex-col sm:flex-row justify-between sm:items-center">
-									<p className="font-medium">{post.title}</p>
-									<p className="text-xs">
-										By {post.author.fname} {post.author.lname}
-									</p>
-								</div>
-								<p className="text-sm ">{post.content}</p>
-							</div>
-							<div className="w-2/12 text-sm">
-								{/* <DeleteBtn
-									btnSize={14}
-									btnName="Approve"
-									onDelete={() => approvePost(post._id)}
-								/> */}
-								<button>Delete</button>
+							className={`w-52 flex flex-col justify-center h-40 border bg-green-400 text-white rounded-lg`}>
+							<p className="text-2xl font-semibold p-4">101</p>
+							<div className="text-sm p-4">
+								<p className="text-base font-semibold">Room Details</p>
+								<p>
+									<span className="font-semibold">Room Type: </span>Single
+								</p>
+								<p>
+									<span className="font-semibold">Max Occupancy: </span>2
+								</p>
+								<p>
+									<span className="font-semibold">Price Per Night: </span>
+									1600
+								</p>
 							</div>
 						</li>
-					))
-				) : (
-					<div className="flex flex-row justify-center items-center w-full ">
-						<div className="w-9 h-9 border-t-8 rounded-full border-8 border-t-slate-500 border-gray-300 animate-spin"></div>
+						<li
+							className={`w-52 flex flex-col justify-center h-40 border bg-red-400 text-white rounded-lg`}>
+							<p className="text-2xl font-semibold p-4">101</p>
+							<div className="text-sm p-4">
+								<p className="text-base font-semibold">Room Details</p>
+								<p>
+									<span className="font-semibold">Room Type: </span>Single
+								</p>
+								<p>
+									<span className="font-semibold">Max Occupancy: </span>2
+								</p>
+								<p>
+									<span className="font-semibold">Price Per Night: </span>
+									1600
+								</p>
+							</div>
+						</li>
+					</ul>
+				)}
+				{/* Add New Room */}
+				{bookingUi === 'addNewRoom' && (
+					<div className="w-full mt-2 overflow-y-auto flex justify-center max-h-[40vh] p-8">
+						<div className="w-full md:mt-0 sm:max-w-md xl:p-0 ">
+							<form
+								className="space-y-2 md:space-y-3"
+								onSubmit={handleSubmit}>
+								<div className="flex items-center justify-between gap-4">
+									<label
+										htmlFor="loginEmailOrNumber"
+										className=" whitespace-nowrap text-base font-medium text-gray-900 ">
+										Hotel ID:
+									</label>
+									<input
+										type="text"
+										name="loginEmailOrNumber"
+										id="loginEmailOrNumber"
+										className="bg-gray-100 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-56 p-2.5"
+										disabled
+										value="AXAILDG-1122-2023"
+									/>
+								</div>
+								<div className="flex items-center justify-between gap-4">
+									<label
+										htmlFor="loginEmailOrNumber"
+										className=" whitespace-nowrap text-base font-medium text-gray-900 ">
+										Room Number:
+									</label>
+									<input
+										type="text"
+										name="loginEmailOrNumber"
+										id="loginEmailOrNumber"
+										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-56 p-2.5"
+										placeholder="101"
+										required
+										value={roomNumber}
+										onChange={(e) => setRoomNubmer(e.target.value)}
+									/>
+								</div>
+								<div className="flex items-center justify-between gap-4">
+									<label
+										htmlFor="loginEmailOrNumber"
+										className=" whitespace-nowrap text-base font-medium text-gray-900 ">
+										Max Occupancy:
+									</label>
+									<select
+										name="loginEmailOrNumber"
+										id="loginEmailOrNumber"
+										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-56 p-2.5"
+										value={maxOccupancy}
+										onChange={(e) => setmaxOccupancy(parseInt(e.target.value))}>
+										<option
+											value={2}
+											className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-56 p-2.5">
+											2
+										</option>
+										<option
+											value={3}
+											className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-56 p-2.5">
+											3
+										</option>
+										<option
+											value={4}
+											className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-56 p-2.5">
+											4
+										</option>
+									</select>
+								</div>
+								<div className="flex items-center justify-between gap-4">
+									<label
+										htmlFor="loginEmailOrNumber"
+										className=" whitespace-nowrap text-base font-medium text-gray-900 ">
+										Room Type:
+									</label>
+									<select
+										name="loginEmailOrNumber"
+										id="loginEmailOrNumber"
+										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-56 p-2.5"
+										value={roomType}
+										onChange={(e) => setRoomType(e.target.value)}>
+										<option
+											value="Single"
+											className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-56 p-2.5">
+											Single
+										</option>
+										<option
+											value="Double"
+											className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-56 p-2.5">
+											Double
+										</option>
+									</select>
+								</div>
+								<div className="flex items-center justify-between gap-4">
+									<label
+										htmlFor="loginEmailOrNumber"
+										className=" whitespace-nowrap text-base font-medium text-gray-900 ">
+										Price Per Night:
+									</label>
+									<input
+										type="number"
+										name="loginEmailOrNumber"
+										id="loginEmailOrNumber"
+										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-56 p-2.5"
+										placeholder="1500"
+										required
+										value={pricePerNight}
+										onChange={(e) => setPricePerNight(parseInt(e.target.value))}
+									/>
+								</div>
+
+								<div>
+									<span className="text-red-500">{error}</span>
+								</div>
+								<button
+									type="submit"
+									disabled={false}
+									className="w-full border-black border  text-black font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+									Add New Room
+								</button>
+							</form>
+						</div>
 					</div>
 				)}
-			</ul>
+			</div>
 		</div>
 	);
 }

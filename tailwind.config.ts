@@ -17,6 +17,9 @@ const config: Config = {
 				'footer-bg': '#292A2B',
 			},
 		},
+		backgroundImage: {
+			'bg-book-room': "url('/bg-book-room.jpg')",
+		},
 	},
 	plugins: [],
 };

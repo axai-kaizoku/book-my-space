@@ -3,7 +3,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import useUser from '@/hooks/use-user';
-// import formatDate from '@/utils/format-date';
+import formatDate from '@/utils/format-date';
 
 export default function Dashboard() {
 	const user = useUser();
@@ -12,7 +12,7 @@ export default function Dashboard() {
 
 	useEffect(() => {
 		if (sessionStatus === 'unauthenticated') {
-			router.replace('/signin');
+			router.replace('/auth');
 		}
 	}, [sessionStatus, router]);
 	return (
@@ -21,10 +21,10 @@ export default function Dashboard() {
 				<h1 className="text-3xl font-semibold ">Admin Dashboard</h1>
 				{user && (
 					<div>
-						<p>
-							{user.fname} {user.lname}
+						<p>{user.name}</p>
+						<p className="text-xs font-extralight">
+							Last logged: {formatDate(user.updatedAt)}
 						</p>
-						<p className="text-xs font-extralight">Last logged: 14-04-2001</p>
 					</div>
 				)}
 			</div>

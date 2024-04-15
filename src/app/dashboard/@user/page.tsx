@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import useUser from '@/hooks/use-user';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-// import formatDate from '@/utils/format-date';
+import formatDate from '@/utils/format-date';
 
 export default function UserDashboard() {
 	const { data: session, status: sessionStatus } = useSession();
@@ -29,35 +29,20 @@ export default function UserDashboard() {
 		setLoading(false);
 	};
 
-	const deletePost = async (id: string) => {
-		const res = await fetch(`/api/post/${id}`, {
-			method: 'DELETE',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		});
-		if (res.status === 200) {
-			router.replace('/');
-		} else {
-			console.log('error occurred while deleting');
-		}
-	};
-
 	useEffect(() => {
 		getPosts();
 	}, []);
 
 	return (
-		<>
+		<div className="w-full h-[90vh]">
 			<div className="p-7 flex flex-row justify-between">
 				<h1 className="text-3xl font-semibold ">User Dashboard</h1>
 				{user && (
 					<div>
-						<p>
-							{user.fname} {user.lname}
+						<p>{user.name}</p>
+						<p className="text-xs font-extralight">
+							Last logged: {formatDate(user.updatedAt)}
 						</p>
-
-						<p className="text-xs font-extralight">Last logged: 14-02-2024</p>
 					</div>
 				)}
 			</div>
@@ -68,7 +53,7 @@ export default function UserDashboard() {
 				<div className=" w-11/12 h-full flex flex-row justify-between p-6">
 					<div className=" bg-slate-50  shadow-lg w-11/12 p-3 rounded">
 						<div>
-							<h1 className="text-xl font-bold">Posts</h1>
+							<h1 className="text-xl font-bold">Bookings</h1>
 							<div className="border rounded border-gray-600"></div>
 							<ul className="flex flex-col m-4">
 								{loading ? (
@@ -95,11 +80,6 @@ export default function UserDashboard() {
 												</Link>
 											</button>
 											<button className="w-1/12 mx-2 py-2 sm:py-0">
-												{/* <DeleteBtn
-													btnSize={13}
-													btnName="Delete"
-													onDelete={() => deletePost(post._id)}
-												/> */}
 												<button>Delete</button>
 											</button>
 										</li>
@@ -112,6 +92,6 @@ export default function UserDashboard() {
 					</div>
 				</div>
 			</div>
-		</>
+		</div>
 	);
 }
