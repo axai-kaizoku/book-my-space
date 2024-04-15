@@ -5,12 +5,12 @@ import getUser from '@/lib/get-user';
 export default async function DashboardLayout({
 	children,
 	users,
-	posts,
+	bookings,
 	user,
 }: {
 	children: React.ReactNode;
 	users: React.ReactNode;
-	posts: React.ReactNode;
+	bookings: React.ReactNode;
 	user: React.ReactNode;
 }) {
 	const session = await getServerSession();
@@ -26,7 +26,7 @@ export default async function DashboardLayout({
 			<div className="w-full h-5/6 flex flex-row justify-center items-center">
 				<div className=" w-11/12 h-full flex flex-col lg:flex-row justify-between p-6">
 					<div className=" bg-slate-50 h-fit shadow-lg w-full p-3 rounded lg:w-3/4">
-						{posts}
+						{bookings}
 					</div>
 					<div className=" bg-slate-50 h-fit shadow-lg w-full lg:w-1/5 p-3 rounded">
 						{users}

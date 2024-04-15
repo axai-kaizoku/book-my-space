@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { RoomProps } from '@/types';
 
-export default function Posts() {
+export default function Bookings() {
 	const router = useRouter();
 	const [loading, setLoading] = useState<boolean>(true);
 	const [rooms, setRooms] = useState<RoomProps[]>([]);
@@ -108,50 +108,24 @@ export default function Posts() {
 					<ul className="w-full mt-2 overflow-y-auto max-h-[40vh]">
 						<li className="flex p-3 my-2 text-sm  justify-between border border-b-2 border-b-black rounded-lg items-center">
 							<p>Name</p>
-							<p>Nubmer</p>
-							<p>Email</p>
+							<p className="-m-16">Room No.</p>
 							<p>Check In</p>
 							<p>Check Out</p>
+							<p>Status</p>
 							<p>Price Paid</p>
 						</li>
 						<li className="flex p-3 my-2 text-sm justify-between border rounded-lg items-center">
 							<p>john</p>
-							<p>9391994502</p>
-							<p>demo@example.com</p>
-							<p>15-04-2024 | 15:00</p>
-							<p>16-04-2024 | 15:00</p>
-							<p>₹1600</p>
-						</li>
-						<li className="flex p-3 my-2 text-sm justify-between border rounded-lg items-center">
-							<p>john</p>
-							<p>9391994502</p>
-							<p>demo@example.com</p>
-							<p>15-04-2024 | 15:00</p>
-							<p>16-04-2024 | 15:00</p>
-							<p>₹1600</p>
-						</li>
-						<li className="flex p-3 my-2 text-sm justify-between border rounded-lg items-center">
-							<p>john</p>
-							<p>9391994502</p>
-							<p>demo@example.com</p>
-							<p>15-04-2024 | 15:00</p>
-							<p>16-04-2024 | 15:00</p>
-							<p>₹1600</p>
-						</li>
-						<li className="flex p-3 my-2 text-sm justify-between border rounded-lg items-center">
-							<p>john</p>
-							<p>9391994502</p>
-							<p>demo@example.com</p>
-							<p>15-04-2024 | 15:00</p>
-							<p>16-04-2024 | 15:00</p>
-							<p>₹1600</p>
-						</li>
-						<li className="flex p-3 my-2 text-sm justify-between border rounded-lg items-center">
-							<p>john</p>
-							<p>9391994502</p>
-							<p>demo@example.com</p>
-							<p>15-04-2024 | 15:00</p>
-							<p>16-04-2024 | 15:00</p>
+							<p>101</p>
+							<p>15-04-2024 at 15:00</p>
+							<p>16-04-2024 at 15:00</p>
+							<select name="status">
+								<option value="Processing">Processing</option>
+								<option value="Confirmed">Confirmed</option>
+								<option value="Cancelled">Cancelled</option>
+								<option value="CheckedIn">Checked In</option>
+								<option value="CheckedOut">Checked Out</option>
+							</select>
 							<p>₹1600</p>
 						</li>
 					</ul>

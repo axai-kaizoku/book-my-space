@@ -1,7 +1,8 @@
+import { UserProps } from '@/types';
 import { useEffect, useState } from 'react';
 
 const useUser = () => {
-	const [user, setUser] = useState(null);
+	const [user, setUser] = useState<UserProps | null>(null);
 
 	useEffect(() => {
 		const fetchUser = async () => {

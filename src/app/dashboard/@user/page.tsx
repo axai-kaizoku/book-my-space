@@ -1,5 +1,5 @@
 'use client';
-import { PostProps } from '@/types';
+import { RoomProps } from '@/types';
 // import DeleteBtn from '@/components/DeleteBtn';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -61,7 +61,7 @@ export default function UserDashboard() {
 										<div className="w-9 h-9 border-t-8 rounded-full border-8 border-t-slate-500 border-gray-300 animate-spin"></div>
 									</div>
 								) : posts.length > 0 ? (
-									posts.map((post: PostProps) => (
+									posts.map((post: RoomProps) => (
 										<li
 											key={post._id}
 											className="py-2 px-1 rounded bg-slate-100 m-1 flex flex-col sm:flex-row justify-between items-center">

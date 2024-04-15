@@ -12,22 +12,29 @@ const orderBookSchema = new Schema(
 				required: true,
 			},
 		],
+		persons: {
+			type: Number,
+			default: 1,
+			required: true,
+		},
 		payment: {},
 		buyer: {
 			type: ObjectId,
 			ref: 'User',
 			required: true,
 		},
+		checkIn: {
+			type: Date,
+			required: true,
+		},
+		checkOut: {
+			type: Date,
+			required: true,
+		},
 		status: {
 			type: String,
 			default: 'Processing',
-			enum: [
-				'Processing',
-				'Confirmed',
-				'Cancelled',
-				'Checked In',
-				'Checked Out',
-			],
+			enum: ['Processing', 'Confirmed', 'Cancelled', 'CheckedIn', 'CheckedOut'],
 		},
 	},
 	{ timestamps: true },
