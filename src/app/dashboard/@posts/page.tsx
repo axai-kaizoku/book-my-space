@@ -1,10 +1,12 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { RoomProps } from '@/types';
 
 export default function Posts() {
 	const router = useRouter();
 	const [loading, setLoading] = useState<boolean>(true);
+	const [rooms, setRooms] = useState<RoomProps[]>([]);
 	const [bookingUi, setBookingUi] = useState<string>('recentBookings');
 	const [error, setError] = useState<string>('');
 	const [roomNumber, setRoomNubmer] = useState<string>('');
@@ -12,12 +14,60 @@ export default function Posts() {
 	const [roomType, setRoomType] = useState<string | undefined>('Single');
 	const [pricePerNight, setPricePerNight] = useState<number>(1500);
 
-	useEffect(() => {}, []);
+	const fetchRooms = async (bookingUi: string) => {
+		try {
+			if (bookingUi === 'availableRooms') {
+				setLoading(true);
+				const response = await fetch('/api/room');
+				const data = await response.json();
+				setRooms(data);
+				setLoading(false);
+			} else {
+				return;
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	useEffect(() => {
+		fetchRooms(bookingUi);
+	}, [bookingUi]);
 
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();
-		console.log(roomNumber, maxOccupancy, roomType, pricePerNight);
+		try {
+			const response = await fetch('/api/room', {
+				method: 'POST',
+				body: JSON.stringify({
+					roomNumber,
+					maxOccupancy,
+					roomType,
+					pricePerNight,
+				}),
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			});
+
+			if (!response.ok) {
+				throw new Error('Http error! Status');
+			}
+
+			if (response.status === 400) {
+				setError('Room already exists');
+			}
+
+			setRoomNubmer('');
+			setmaxOccupancy(0);
+			setRoomType('');
+			setPricePerNight(0);
+		} catch (error) {
+			console.log(error);
+		}
+		// console.log(roomNumber, maxOccupancy, roomType, pricePerNight);
 	};
+
 	return (
 		<div>
 			<h1 className="text-xl font-bold">Bookings</h1>
@@ -53,7 +103,6 @@ export default function Posts() {
 						Add new Room
 					</button>
 				</div>
-
 				{/* Recent Bookings */}
 				{bookingUi === 'recentBookings' && (
 					<ul className="w-full mt-2 overflow-y-auto max-h-[40vh]">
@@ -110,40 +159,30 @@ export default function Posts() {
 				{/* Available Rooms */}
 				{bookingUi === 'availableRooms' && (
 					<ul className="w-full flex flex-wrap gap-5 mt-2 p-8 overflow-y-auto max-h-[40vh]">
-						<li
-							className={`w-52 flex flex-col justify-center h-40 border bg-green-400 text-white rounded-lg`}>
-							<p className="text-2xl font-semibold p-4">101</p>
-							<div className="text-sm p-4">
-								<p className="text-base font-semibold">Room Details</p>
-								<p>
-									<span className="font-semibold">Room Type: </span>Single
-								</p>
-								<p>
-									<span className="font-semibold">Max Occupancy: </span>2
-								</p>
-								<p>
-									<span className="font-semibold">Price Per Night: </span>
-									1600
-								</p>
-							</div>
-						</li>
-						<li
-							className={`w-52 flex flex-col justify-center h-40 border bg-red-400 text-white rounded-lg`}>
-							<p className="text-2xl font-semibold p-4">101</p>
-							<div className="text-sm p-4">
-								<p className="text-base font-semibold">Room Details</p>
-								<p>
-									<span className="font-semibold">Room Type: </span>Single
-								</p>
-								<p>
-									<span className="font-semibold">Max Occupancy: </span>2
-								</p>
-								<p>
-									<span className="font-semibold">Price Per Night: </span>
-									1600
-								</p>
-							</div>
-						</li>
+						{rooms.map((room: RoomProps) => (
+							<li
+								key={room._id}
+								className={`w-52 flex flex-col justify-center h-40 border ${
+									room.isBooked ? 'bg-red-400' : 'bg-green-400'
+								} text-white rounded-lg`}>
+								<p className="text-2xl font-semibold p-4">{room.roomNumber}</p>
+								<div className="text-sm p-4">
+									<p className="text-base font-semibold">Room Details</p>
+									<p>
+										<span className="font-semibold">Room Type: </span>
+										{room.roomType}
+									</p>
+									<p>
+										<span className="font-semibold">Max Occupancy: </span>
+										{room.maxOccupancy}
+									</p>
+									<p>
+										<span className="font-semibold">Price Per Night: </span>
+										{room.pricePerNight}
+									</p>
+								</div>
+							</li>
+						))}
 					</ul>
 				)}
 				{/* Add New Room */}

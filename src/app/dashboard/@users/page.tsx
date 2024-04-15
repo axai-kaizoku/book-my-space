@@ -1,6 +1,13 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { UserProps } from '@/types';
+import {
+	Accordion,
+	AccordionContent,
+	AccordionItem,
+	AccordionTrigger,
+} from '@/components/ui/accordion';
+import formatDate from '@/utils/format-date';
 
 export default function Users() {
 	const [users, setUsers] = useState([]);
@@ -19,16 +26,23 @@ export default function Users() {
 		<div>
 			<h1 className="text-xl font-bold">Users</h1>
 			<div className="border rounded border-gray-600"></div>
-			<ul className="flex flex-col m-4 overflow-y-auto max-h-[40vh]">
+			<ul className="flex flex-col m-2 overflow-y-auto max-h-[40vh]">
 				{users.length > 0 ? (
 					users.map((user: UserProps) => (
-						<li
-							key={user._id}
-							className="py-2 text-sm px-2 rounded-lg bg-slate-100 m-1 flex flex-row justify-between items-center">
-							<p>{user.name}</p>
-							<p>{user.email}</p>
-							<p>{user.mobile}</p>
-						</li>
+						<Accordion
+							type="single"
+							collapsible
+							key={user._id}>
+							<AccordionItem value="item-1">
+								<AccordionTrigger>{user.name}</AccordionTrigger>
+								<AccordionContent>
+									<p>Name: {user.name}</p>
+									<p>Mobile: {user.mobile}</p>
+									<p>Email: {user.email}</p>
+									<p>Created At: {formatDate(user.createdAt)}</p>
+								</AccordionContent>
+							</AccordionItem>
+						</Accordion>
 					))
 				) : (
 					<div className="flex flex-row justify-center items-center w-full ">

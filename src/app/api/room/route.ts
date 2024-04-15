@@ -25,3 +25,15 @@ export async function POST(request: any) {
 		});
 	}
 }
+
+export async function GET(request: any) {
+	await connect();
+	try {
+		const rooms = await Room.find({});
+		return Response.json(rooms, { status: 200 });
+	} catch (error: any) {
+		return new NextResponse(error, {
+			status: 500,
+		});
+	}
+}
