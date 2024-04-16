@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { RoomProps } from '@/types';
 import { formatOrderDate } from '@/utils/format-date';
+import { Switch } from '@/components/ui/switch';
 
 export default function Bookings() {
 	const router = useRouter();
@@ -48,11 +49,6 @@ export default function Bookings() {
 		}
 	};
 
-	useEffect(() => {
-		fetchRooms(bookingUi);
-		fetchBookings(bookingUi);
-	}, [bookingUi]);
-
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();
 		try {
@@ -86,6 +82,49 @@ export default function Bookings() {
 		}
 		// console.log(roomNumber, maxOccupancy, roomType, pricePerNight);
 	};
+
+	const handleChange = async (id: any, status: any) => {
+		try {
+			const response = await fetch('/api/all-bookings', {
+				method: 'POST',
+				body: JSON.stringify({ id, status }),
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			});
+
+			if (!response.ok) {
+				throw new Error(`HTTP error! Status: ${response.status}`);
+			}
+			fetchBookings(bookingUi);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	const handleSwitch = async (id: any) => {
+		try {
+			const response = await fetch('/api/room-status', {
+				method: 'POST',
+				body: JSON.stringify({ id }),
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			});
+
+			if (!response.ok) {
+				throw new Error(`HTTP error! Status: ${response.status}`);
+			}
+			fetchRooms(bookingUi);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	useEffect(() => {
+		fetchRooms(bookingUi);
+		fetchBookings(bookingUi);
+	}, [bookingUi]);
 
 	return (
 		<div>
@@ -149,7 +188,15 @@ export default function Bookings() {
 									</p>
 									<p>{formatOrderDate(order.checkIn)}</p>
 									<p>{formatOrderDate(order.checkOut)}</p>
-									<p>{order.status}</p>
+									<select
+										value={order.status}
+										onChange={(e) => handleChange(order._id, e.target.value)}>
+										<option value="Processing">Processing</option>
+										<option value="Confirmed">Confirmed</option>
+										<option value="Cancelled">Cancelled</option>
+										<option value="CheckedIn">CheckedIn</option>
+										<option value="CheckedOut">CheckedOut</option>
+									</select>
 								</li>
 							))
 						) : (
@@ -166,7 +213,15 @@ export default function Bookings() {
 								className={`w-52 flex flex-col justify-center h-40 border ${
 									room.isBooked ? 'bg-red-400' : 'bg-green-400'
 								} text-white rounded-lg`}>
-								<p className="text-2xl font-semibold p-4">{room.roomNumber}</p>
+								<div className="flex justify-between items-center px-2">
+									<p className="text-2xl font-semibold p-2">
+										{room.roomNumber}
+									</p>
+									<Switch
+										checked={room.isBooked}
+										onCheckedChange={() => handleSwitch(room._id)}
+									/>
+								</div>
 								<div className="text-sm p-4">
 									<p className="text-base font-semibold">Room Details</p>
 									<p>

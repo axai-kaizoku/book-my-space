@@ -1,7 +1,5 @@
 'use client';
 import { RoomProps } from '@/types';
-// import DeleteBtn from '@/components/DeleteBtn';
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import useUser from '@/hooks/use-user';
 import { useSession } from 'next-auth/react';

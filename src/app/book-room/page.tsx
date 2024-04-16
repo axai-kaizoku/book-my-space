@@ -155,32 +155,42 @@ export default function BookRoom() {
 								Available Rooms
 							</h1>
 							<ul className="w-full flex flex-wrap gap-5 mt-2 p-8 overflow-y-auto max-h-[40vh]">
-								{rooms.map((room: RoomProps) => (
-									<li
-										key={room._id}
-										className={`w-48 flex flex-col justify-center h-40 border ${
-											room.isBooked ? 'bg-red-400' : 'bg-green-400'
-										} text-white rounded-lg`}>
-										<p className="text-2xl font-semibold p-4">
-											{room.roomNumber}
-										</p>
-										<div className="text-sm p-4">
-											<p className="text-base font-semibold">Room Details</p>
-											<p>
-												<span className="font-semibold">Room Type: </span>
-												{room.roomType}
+								{loading ? (
+									<div className="flex flex-row justify-center items-center w-full ">
+										<div className="w-9 h-9 border-t-8 rounded-full border-8 border-t-slate-500 border-gray-300 animate-spin"></div>
+									</div>
+								) : rooms.length > 0 ? (
+									rooms.map((room: RoomProps) => (
+										<li
+											key={room._id}
+											className={`w-48 flex flex-col justify-center h-40 border ${
+												room.isBooked ? 'bg-red-400' : 'bg-green-400'
+											} text-white rounded-lg`}>
+											<p className="text-2xl font-semibold p-4">
+												{room.roomNumber}
 											</p>
-											<p>
-												<span className="font-semibold">Max Occupancy: </span>
-												{room.maxOccupancy}
-											</p>
-											<p>
-												<span className="font-semibold">Price Per Night: </span>
-												₹{room.pricePerNight}
-											</p>
-										</div>
-									</li>
-								))}
+											<div className="text-sm p-4">
+												<p className="text-base font-semibold">Room Details</p>
+												<p>
+													<span className="font-semibold">Room Type: </span>
+													{room.roomType}
+												</p>
+												<p>
+													<span className="font-semibold">Max Occupancy: </span>
+													{room.maxOccupancy}
+												</p>
+												<p>
+													<span className="font-semibold">
+														Price Per Night:{' '}
+													</span>
+													₹{room.pricePerNight}
+												</p>
+											</div>
+										</li>
+									))
+								) : (
+									<li className="text-center text-xl">No bookings yet!</li>
+								)}
 							</ul>
 						</div>
 					</div>

@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Footer() {
 	return (
@@ -29,7 +30,7 @@ export default function Footer() {
 								width={30}
 								height={30}
 								alt="facebook"
-								className="object-contain "
+								className="object-contain cursor-pointer"
 							/>
 						</li>
 						<li>
@@ -38,7 +39,7 @@ export default function Footer() {
 								width={30}
 								height={30}
 								alt="insta"
-								className="object-contain"
+								className="object-contain cursor-pointer"
 							/>
 						</li>
 						<li>
@@ -47,8 +48,21 @@ export default function Footer() {
 								width={30}
 								height={30}
 								alt="twitter"
-								className="object-contain"
+								className="object-contain cursor-pointer"
 							/>
+						</li>
+						<li>
+							<Link
+								href="https://github.com/axai-kaizoku"
+								target="_blank">
+								<Image
+									src="/github-white.svg"
+									width={30}
+									height={30}
+									alt="twitter"
+									className="object-contain"
+								/>
+							</Link>
 						</li>
 					</ul>
 				</div>

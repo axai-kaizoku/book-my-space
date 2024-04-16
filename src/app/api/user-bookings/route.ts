@@ -16,7 +16,8 @@ export async function GET(request: any) {
 		// Populate the rooms and user fields
 		const orders = await OrderBook.find({ user: user._id })
 			.populate('rooms')
-			.populate('user', 'name');
+			.populate('user', 'name')
+			.sort({ createdAt: -1 });
 
 		// Map the orders to include roomNo and name
 		const populatedOrders = orders.map((order) => ({
