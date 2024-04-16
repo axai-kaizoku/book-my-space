@@ -24,7 +24,7 @@ export default function Modal({ children, modalClose }: ModalProps) {
 				as={Fragment}>
 				<Dialog
 					as="div"
-					className="relative z-10"
+					className="relative z-30"
 					onClose={closeModal}>
 					<Transition.Child
 						as={Fragment}

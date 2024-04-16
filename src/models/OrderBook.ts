@@ -18,7 +18,7 @@ const orderBookSchema = new Schema(
 			required: true,
 		},
 		payment: {},
-		buyer: {
+		user: {
 			type: ObjectId,
 			ref: 'User',
 			required: true,

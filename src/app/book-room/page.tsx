@@ -2,8 +2,15 @@
 import { RoomProps } from '@/types';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import useUser from '@/hooks/use-user';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 export default function BookRoom() {
+	const user = useUser();
+	const { data: session, status: sessionStatus } = useSession();
+
+	const router = useRouter();
 	const [error, setError] = useState<string>('');
 	const [rooms, setRooms] = useState<RoomProps[]>([]);
 	const [loading, setLoading] = useState<boolean>(false);
@@ -11,6 +18,12 @@ export default function BookRoom() {
 	const [checkOut, setCheckOut] = useState<string>();
 	const [person, setPerson] = useState<number>(1);
 	const [bookingRooms, setBookingRooms] = useState<number>(1);
+
+	useEffect(() => {
+		if (sessionStatus === 'unauthenticated') {
+			router.replace('/auth');
+		}
+	}, [sessionStatus, router]);
 
 	const incrementRooms = () => {
 		if (bookingRooms < 3) setBookingRooms(bookingRooms + 1);
@@ -28,7 +41,8 @@ export default function BookRoom() {
 		if (person > 1) setPerson(person - 1);
 	};
 
-	let isBookingDisabled = true;
+	var isBookingDisabled = true;
+
 	if (person <= 2 && bookingRooms === 1) {
 		isBookingDisabled = false;
 	}
@@ -42,26 +56,83 @@ export default function BookRoom() {
 		isBookingDisabled = false;
 	}
 
-	const fetchRooms = async () => {
+	const fetchRoomsAndAvailable = async () => {
 		try {
 			setLoading(true);
 			const response = await fetch('/api/room');
 			const data = await response.json();
 			setRooms(data);
 			setLoading(false);
+			const allRooms = rooms.map((room) => !room.isBooked);
+			const anyRoomAvailable = allRooms.every((isBooked) => !isBooked);
+			return !anyRoomAvailable;
 		} catch (error) {
 			console.log(error);
 		}
 	};
 
 	useEffect(() => {
-		fetchRooms();
+		fetchRoomsAndAvailable();
 	}, []);
 
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();
-		console.log(checkIn, checkOut, bookingRooms, person);
+
+		const checkInDate = new Date(checkIn);
+		const checkOutDate = new Date(checkOut);
+		const currentTime = Date.now();
+
+		if (await fetchRoomsAndAvailable()) {
+			// Check if both dates are valid
+			if (!isNaN(checkInDate) && !isNaN(checkOutDate)) {
+				// Check if Check Out date is greater than Check In date
+				if (checkOutDate > checkInDate) {
+					// Check if both dates are greater than the current time
+					if (
+						checkInDate.getTime() > currentTime &&
+						checkOutDate.getTime() > currentTime
+					) {
+						setError('');
+
+						const orderBook = {
+							persons: person,
+							user: user?._id,
+							checkIn: checkInDate,
+							checkOut: checkOutDate,
+						};
+						// console.log(orderBook);
+						const response = await fetch('/api/book-room', {
+							method: 'POST',
+							body: JSON.stringify(orderBook),
+							headers: {
+								'Content-Type': 'application/json',
+							},
+						});
+
+						if (!response.ok) {
+							throw new Error(`HTTP error! Status: ${response.status}`);
+						}
+
+						const data = await response.json();
+
+						// console.log(data);
+						await fetchRoomsAndAvailable();
+						// console.log(await fetchRoomsAndAvailable());
+					} else {
+						setError('Both dates should be greater than the current time.');
+					}
+				} else {
+					setError('Check Out date should be greater than Check In date.');
+				}
+			} else {
+				setError('Invalid date format.');
+			}
+		} else {
+			setError('No rooms available !');
+			return;
+		}
 	};
+
 	return (
 		<>
 			<section className="relative">
@@ -87,7 +158,7 @@ export default function BookRoom() {
 								{rooms.map((room: RoomProps) => (
 									<li
 										key={room._id}
-										className={`w-52 flex flex-col justify-center h-40 border ${
+										className={`w-48 flex flex-col justify-center h-40 border ${
 											room.isBooked ? 'bg-red-400' : 'bg-green-400'
 										} text-white rounded-lg`}>
 										<p className="text-2xl font-semibold p-4">
@@ -190,7 +261,7 @@ export default function BookRoom() {
 												/>
 											</div>
 										</div>
-										<div className="flex pl-20 flex-col">
+										<div className="flex pl-0  lg:pl-20 flex-col">
 											<label
 												htmlFor="signinPassword"
 												className="block mb-2 text-sm font-medium text-gray-900 ">
@@ -223,16 +294,15 @@ export default function BookRoom() {
 												/>
 											</div>
 										</div>
-
 										<div>
-											<span className="text-red-500">{error}</span>
+											<span className="text-red-500 my-4 text-sm">{error}</span>
 										</div>
 										<button
 											type="submit"
 											disabled={isBookingDisabled}
 											className={`w-full ${
 												isBookingDisabled ? '  cursor-not-allowed' : ''
-											} mt-8 border-black border bg-slate-700 text-slate-100  font-medium rounded-lg text-sm px-5 py-2.5 text-center`}>
+											} mt-4 border-black border bg-slate-700 text-slate-100  font-medium rounded-lg text-sm px-5 py-2.5 text-center`}>
 											Book
 										</button>
 									</form>
