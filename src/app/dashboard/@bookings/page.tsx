@@ -2,10 +2,12 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { RoomProps } from '@/types';
+import { formatOrderDate } from '@/utils/format-date';
 
 export default function Bookings() {
 	const router = useRouter();
 	const [loading, setLoading] = useState<boolean>(true);
+	const [orders, setOrders] = useState([]);
 	const [rooms, setRooms] = useState<RoomProps[]>([]);
 	const [bookingUi, setBookingUi] = useState<string>('recentBookings');
 	const [error, setError] = useState<string>('');
@@ -30,8 +32,25 @@ export default function Bookings() {
 		}
 	};
 
+	const fetchBookings = async (bookingUi: string) => {
+		try {
+			if (bookingUi === 'recentBookings') {
+				setLoading(true);
+				const response = await fetch('/api/all-bookings');
+				const data = await response.json();
+				setOrders(data);
+				setLoading(false);
+			} else {
+				return;
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	useEffect(() => {
 		fetchRooms(bookingUi);
+		fetchBookings(bookingUi);
 	}, [bookingUi]);
 
 	const handleSubmit = async (e: any) => {
@@ -112,22 +131,30 @@ export default function Bookings() {
 							<p>Check In</p>
 							<p>Check Out</p>
 							<p>Status</p>
-							<p>Price Paid</p>
 						</li>
-						<li className="flex p-3 my-2 text-sm justify-between border rounded-lg items-center">
-							<p>john</p>
-							<p>101</p>
-							<p>15-04-2024 at 15:00</p>
-							<p>16-04-2024 at 15:00</p>
-							<select name="status">
-								<option value="Processing">Processing</option>
-								<option value="Confirmed">Confirmed</option>
-								<option value="Cancelled">Cancelled</option>
-								<option value="CheckedIn">Checked In</option>
-								<option value="CheckedOut">Checked Out</option>
-							</select>
-							<p>₹1600</p>
-						</li>
+						{loading ? (
+							<div className="flex flex-row justify-center items-center w-full ">
+								<div className="w-9 h-9 border-t-8 rounded-full border-8 border-t-slate-500 border-gray-300 animate-spin"></div>
+							</div>
+						) : orders.length > 0 ? (
+							orders.map((order) => (
+								<li
+									key={order._id}
+									className="flex p-3 my-2 text-sm justify-between border rounded-lg items-center">
+									<p>{order.user.name}</p>
+									<p>
+										{order.rooms
+											.map((room: RoomProps) => room.roomNumber)
+											.join(', ')}
+									</p>
+									<p>{formatOrderDate(order.checkIn)}</p>
+									<p>{formatOrderDate(order.checkOut)}</p>
+									<p>{order.status}</p>
+								</li>
+							))
+						) : (
+							<li className="text-center text-xl">No bookings yet!</li>
+						)}
 					</ul>
 				)}
 				{/* Available Rooms */}

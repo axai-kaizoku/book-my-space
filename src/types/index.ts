@@ -23,6 +23,7 @@ export interface RoomProps {
 	_id: string;
 	hotelId: string;
 	roomNumber: string;
+	roomNo: string;
 	roomType: string;
 	maxOccupancy: number;
 	pricePerNight: number;

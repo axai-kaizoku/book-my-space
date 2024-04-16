@@ -6,26 +6,27 @@ import { useEffect, useState } from 'react';
 import useUser from '@/hooks/use-user';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import formatDate from '@/utils/format-date';
+import formatDate, { formatOrderDate } from '@/utils/format-date';
 
 export default function UserDashboard() {
 	const { data: session, status: sessionStatus } = useSession();
 	const user = useUser();
-	const [posts, setPosts] = useState([]);
+	const [orders, setOrders] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const router = useRouter();
 
 	useEffect(() => {
 		if (sessionStatus === 'unauthenticated') {
-			router.replace('/signin');
+			router.replace('/auth');
 		}
 	}, [sessionStatus, router]);
 
 	const getPosts = async () => {
 		setLoading(true);
-		const res = await fetch('/api/user-posts');
+		const res = await fetch('/api/user-bookings');
 		const data = await res.json();
-		setPosts(data);
+		console.log(data);
+		setOrders(data);
 		setLoading(false);
 	};
 
@@ -55,37 +56,36 @@ export default function UserDashboard() {
 						<div>
 							<h1 className="text-xl font-bold">Bookings</h1>
 							<div className="border rounded border-gray-600"></div>
-							<ul className="flex flex-col m-4">
+							<ul className="flex flex-col m-4 overflow-y-auto">
+								<li className="flex p-3 my-2 text-sm  justify-between border border-b-2 border-b-black rounded-lg items-center">
+									<p>Name</p>
+									<p className="-m-20">Room No.</p>
+									<p>Check In</p>
+									<p>Check Out</p>
+									<p>Status</p>
+								</li>
 								{loading ? (
 									<div className="flex flex-row justify-center items-center w-full ">
 										<div className="w-9 h-9 border-t-8 rounded-full border-8 border-t-slate-500 border-gray-300 animate-spin"></div>
 									</div>
-								) : posts.length > 0 ? (
-									posts.map((post: RoomProps) => (
+								) : orders.length > 0 ? (
+									orders.map((order) => (
 										<li
-											key={post._id}
-											className="py-2 px-1 rounded bg-slate-100 m-1 flex flex-col sm:flex-row justify-between items-center">
-											<p className="w-4/5">
-												<p className="font-medium">{post.title}</p>
-												<p className="text-sm ">
-													{post.content.slice(
-														0,
-														post.content.lastIndexOf(' ', 50),
-													) + ' ...'}
-												</p>
+											key={order._id}
+											className="flex p-3 my-2 text-sm justify-between border rounded-lg items-center">
+											<p>{order.user.name}</p>
+											<p>
+												{order.rooms
+													.map((room: RoomProps) => room.roomNo)
+													.join(', ')}
 											</p>
-											<button className="w-1/12 py-2 sm:py-0">
-												<Link href={`/dashboard/edit-post/${post._id}`}>
-													Edit
-												</Link>
-											</button>
-											<button className="w-1/12 mx-2 py-2 sm:py-0">
-												<button>Delete</button>
-											</button>
+											<p>{formatOrderDate(order.checkIn)}</p>
+											<p>{formatOrderDate(order.checkOut)}</p>
+											<p>{order.status}</p>
 										</li>
 									))
 								) : (
-									<li className="text-center text-xl">No posts yet!</li>
+									<li className="text-center text-xl">No bookings yet!</li>
 								)}
 							</ul>
 						</div>
