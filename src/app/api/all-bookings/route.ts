@@ -2,14 +2,14 @@ import connect from '@/utils/database';
 import OrderBook from '@/models/OrderBook';
 import { NextResponse } from 'next/server';
 
-export async function GET() {
+export async function GET(request: any) {
 	await connect();
 	try {
-		const orders = await OrderBook.find()
-			.populate('rooms')
-			.populate('user', 'name')
-			.sort({ createdAt: -1 });
-		return Response.json(orders, { status: 200 });
+		const orders = await OrderBook.find({})
+			.populate('rooms', 'roomNumber')
+			.populate('user', 'name');
+
+		return NextResponse.json(orders, { status: 200 });
 	} catch (error: any) {
 		return Response.json(error, { status: 500 });
 	}

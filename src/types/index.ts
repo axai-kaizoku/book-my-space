@@ -38,4 +38,15 @@ export interface UserProps {
 	password: string;
 	isAdmin: boolean;
 	updatedAt: Date;
+	createdAt: Date;
+}
+
+export interface OrderProps {
+	_id?: string;
+	rooms: RoomProps[];
+	persons: number;
+	user: UserProps;
+	checkIn: Date;
+	checkOut: Date;
+	status: string;
 }

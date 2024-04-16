@@ -1,14 +1,12 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { RoomProps } from '@/types';
+import { OrderProps, RoomProps } from '@/types';
 import { formatOrderDate } from '@/utils/format-date';
 import { Switch } from '@/components/ui/switch';
 
 export default function Bookings() {
-	const router = useRouter();
 	const [loading, setLoading] = useState<boolean>(true);
-	const [orders, setOrders] = useState([]);
+	const [orders, setOrders] = useState<OrderProps[]>([]);
 	const [rooms, setRooms] = useState<RoomProps[]>([]);
 	const [bookingUi, setBookingUi] = useState<string>('recentBookings');
 	const [error, setError] = useState<string>('');
@@ -175,7 +173,8 @@ export default function Bookings() {
 							<div className="flex flex-row justify-center items-center w-full ">
 								<div className="w-9 h-9 border-t-8 rounded-full border-8 border-t-slate-500 border-gray-300 animate-spin"></div>
 							</div>
-						) : orders.length > 0 ? (
+						) : (
+							orders &&
 							orders.map((order) => (
 								<li
 									key={order._id}
@@ -199,8 +198,6 @@ export default function Bookings() {
 									</select>
 								</li>
 							))
-						) : (
-							<li className="text-center text-xl">No bookings yet!</li>
 						)}
 					</ul>
 				)}
