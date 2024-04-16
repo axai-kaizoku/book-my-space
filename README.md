@@ -1,6 +1,6 @@
 # Book my Space
 
-[Live Preview](https://)
+[Live Preview](https://book-my-space.vercel.app/)
 
 A Basic room booking app for a hotel. Users can signup/ signin and book hotel and able to see room booking details in their dashboard. Developed admin dashbaord to manage all the room bookings.
 
