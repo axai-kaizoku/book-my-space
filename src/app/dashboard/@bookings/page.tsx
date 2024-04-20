@@ -88,7 +88,6 @@ export default function Bookings() {
 		} catch (error) {
 			console.log(error);
 		}
-		// console.log(roomNumber, maxOccupancy, roomType, pricePerNight);
 	};
 
 	const handleChange = async (id: any, status: any) => {

@@ -44,12 +44,7 @@ export default function Authentication() {
 
 			const data = await response.json();
 
-			console.log(data.email);
 			const loginEmail = data.email;
-			const loginMobile = data.mobile;
-
-			console.log(loginEmail, loginMobile);
-			console.log(loginEmailOrNumber, loginPassword, 'logged in successfully');
 
 			const res = await signIn('credentials', {
 				redirect: false,
@@ -65,7 +60,6 @@ export default function Authentication() {
 			if (res?.ok) router.replace('/');
 			router.refresh();
 
-			console.log(loginEmailOrNumber, loginPassword, 'logged in successfully');
 			setLoginEmailOrNumber('');
 			setLoginPassword('');
 			setError('');
@@ -112,14 +106,6 @@ export default function Authentication() {
 				return;
 			}
 
-			console.log(
-				name,
-				email,
-				password,
-				mobile,
-				terms,
-				'Account created successfully',
-			);
 			setName('');
 			setEmail('');
 			setMobile('');

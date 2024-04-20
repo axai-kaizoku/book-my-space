@@ -32,7 +32,6 @@ export default function UserDashboard() {
 		setLoading(true);
 		const res = await fetch('/api/user-bookings');
 		const data = await res.json();
-		console.log(data);
 		setOrders(data);
 		setLoading(false);
 	};

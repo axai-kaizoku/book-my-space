@@ -100,7 +100,7 @@ export default function BookRoom() {
 							checkIn: checkInDate,
 							checkOut: checkOutDate,
 						};
-						// console.log(orderBook);
+
 						const response = await fetch('/api/book-room', {
 							method: 'POST',
 							body: JSON.stringify(orderBook),
@@ -115,9 +115,7 @@ export default function BookRoom() {
 
 						const data = await response.json();
 
-						// console.log(data);
 						await fetchRoomsAndAvailable();
-						// console.log(await fetchRoomsAndAvailable());
 					} else {
 						setError('Both dates should be greater than the current time.');
 					}
