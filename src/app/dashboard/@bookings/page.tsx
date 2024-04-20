@@ -173,30 +173,59 @@ export default function Bookings() {
 				{bookingUi === 'recentBookings' && (
 					<div className="w-full mt-2 overflow-y-auto max-h-[40vh]">
 						<Table>
-							<TableCaption>A list of your recent bookings.</TableCaption>
 							<TableHeader>
 								<TableRow>
-									<TableHead className="w-[100px]">Name</TableHead>
+									<TableHead>Name</TableHead>
 									<TableHead>Room No.</TableHead>
 									<TableHead>Check In</TableHead>
 									<TableHead>Check Out</TableHead>
-									<TableHead className="text-right">Status</TableHead>
+									<TableHead>Status</TableHead>
 								</TableRow>
 							</TableHeader>
-
 							<TableBody>
-								<TableRow>
-									<TableCell className="font-medium">INV001</TableCell>
-									<TableCell>Paid</TableCell>
-									<TableCell>Credit Card</TableCell>
-									<TableCell className="text-right">$250.00</TableCell>
-								</TableRow>
+								{loading ? (
+									<TableCaption
+										aria-colspan={5}
+										className="w-full flex justify-center items-center ">
+										<div className="w-9 h-9 border-t-8 rounded-full border-8 border-t-slate-500 border-gray-300 animate-spin"></div>
+									</TableCaption>
+								) : (
+									orders &&
+									orders.map((order) => (
+										<TableRow key={order._id}>
+											<TableCell className="font-medium">
+												{order.user.name}
+											</TableCell>
+											<TableCell>
+												{order.rooms
+													.map((room: RoomProps) => room.roomNumber)
+													.join(', ')}
+											</TableCell>
+											<TableCell>{formatOrderDate(order.checkIn)}</TableCell>
+											<TableCell>{formatOrderDate(order.checkOut)}</TableCell>
+											<TableCell>
+												<select
+													className="bg-transparent"
+													value={order.status}
+													onChange={(e) =>
+														handleChange(order._id, e.target.value)
+													}>
+													<option value="Processing">Processing</option>
+													<option value="Confirmed">Confirmed</option>
+													<option value="Cancelled">Cancelled</option>
+													<option value="CheckedIn">CheckedIn</option>
+													<option value="CheckedOut">CheckedOut</option>
+												</select>
+											</TableCell>
+										</TableRow>
+									))
+								)}
 							</TableBody>
 						</Table>
 					</div>
 				)}
 
-				{bookingUi === 'recentBookings' && (
+				{/* {bookingUi === 'recentBookings' && (
 					<ul className="w-full mt-2 overflow-y-auto max-h-[40vh]">
 						<li className="flex p-3 my-2 text-sm  justify-between border border-b-2 border-b-black rounded-lg items-center">
 							<p>Name</p>
@@ -236,42 +265,50 @@ export default function Bookings() {
 							))
 						)}
 					</ul>
-				)}
+				)} */}
 				{/* Available Rooms */}
 				{bookingUi === 'availableRooms' && (
 					<ul className="w-full flex flex-wrap gap-5 mt-2 p-8 overflow-y-auto max-h-[40vh]">
-						{rooms.map((room: RoomProps) => (
-							<li
-								key={room._id}
-								className={`w-52 flex flex-col justify-center h-40 border ${
-									room.isBooked ? 'bg-red-400' : 'bg-green-400'
-								} text-white rounded-lg`}>
-								<div className="flex justify-between items-center px-2">
-									<p className="text-2xl font-semibold p-2">
-										{room.roomNumber}
-									</p>
-									<Switch
-										checked={room.isBooked}
-										onCheckedChange={() => handleSwitch(room._id)}
-									/>
-								</div>
-								<div className="text-sm p-4">
-									<p className="text-base font-semibold">Room Details</p>
-									<p>
-										<span className="font-semibold">Room Type: </span>
-										{room.roomType}
-									</p>
-									<p>
-										<span className="font-semibold">Max Occupancy: </span>
-										{room.maxOccupancy}
-									</p>
-									<p>
-										<span className="font-semibold">Price Per Night: </span>
-										{room.pricePerNight}
-									</p>
-								</div>
-							</li>
-						))}
+						{loading ? (
+							<div className="flex flex-row justify-center items-center w-full ">
+								<div className="w-9 h-9 border-t-8 rounded-full border-8 border-t-slate-500 border-gray-300 animate-spin"></div>
+							</div>
+						) : rooms.length > 0 ? (
+							rooms.map((room: RoomProps) => (
+								<li
+									key={room._id}
+									className={`w-52 flex flex-col justify-center h-40 border ${
+										room.isBooked ? 'bg-red-400' : 'bg-green-400'
+									} text-white rounded-lg`}>
+									<div className="flex justify-between items-center px-2">
+										<p className="text-2xl font-semibold p-2">
+											{room.roomNumber}
+										</p>
+										<Switch
+											checked={room.isBooked}
+											onCheckedChange={() => handleSwitch(room._id)}
+										/>
+									</div>
+									<div className="text-sm p-4">
+										<p className="text-base font-semibold">Room Details</p>
+										<p>
+											<span className="font-semibold">Room Type: </span>
+											{room.roomType}
+										</p>
+										<p>
+											<span className="font-semibold">Max Occupancy: </span>
+											{room.maxOccupancy}
+										</p>
+										<p>
+											<span className="font-semibold">Price Per Night: </span>
+											{room.pricePerNight}
+										</p>
+									</div>
+								</li>
+							))
+						) : (
+							<>No rooms !!</>
+						)}
 					</ul>
 				)}
 				{/* Add New Room */}

@@ -189,7 +189,7 @@ export default function BookRoom() {
 										</li>
 									))
 								) : (
-									<li className="text-center text-xl">No bookings yet!</li>
+									<li className="text-center text-xl">No rooms!</li>
 								)}
 							</ul>
 						</div>
