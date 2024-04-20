@@ -47,9 +47,9 @@ export default function Home() {
 				</div>
 				<div className="w-full lg:w-2/4 mt-6 px-8 lg:mt-0">
 					<p className="pt-4 md:pt-56 text-lg ">
-						brother heavy check choose motor wall blow object score crowd saved
-						sad country copy vapor noted noun help act famous already use almost
-						many
+						Discover tailored accommodations for every traveler. From serene
+						retreats to vibrant spaces, find your perfect getaway. Get your
+						rooms booked from anywhere any time.
 					</p>
 					<div className="w-11/12 flex  pt-12 md:pt-40 gap-8 flex-col">
 						<Link
@@ -81,9 +81,9 @@ export default function Home() {
 					/>
 					<hr className="border-slate-700 border w-full" />
 					<p>
-						scientist wire return wealth compound corner newspaper location ear
-						will jar substance spin put further fairly liquid practical anybody
-						yellow coffee television south number
+						Experience tranquility in our private rooms, ensuring secluded
+						comfort. Escape into serenity with our discreet accommodations,
+						offering the ultimate privacy for your stay.
 					</p>
 				</div>
 				<div className="flex justify-between gap-20 items-center w-full lg:w-2/5 flex-col border p-10 ">
@@ -95,9 +95,9 @@ export default function Home() {
 					/>
 					<hr className="border-slate-700 border w-full" />
 					<p>
-						scientist wire return wealth compound corner newspaper location ear
-						will jar substance spin put further fairly liquid practical anybody
-						yellow coffee television south number
+						Experience convenience at its peak with our 24/7 booking
+						availability. Seamlessly reserve your ideal room anytime, ensuring
+						effortless planning for your stay.
 					</p>
 				</div>
 			</section>
