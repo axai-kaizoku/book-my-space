@@ -4,11 +4,21 @@ import { OrderProps, RoomProps } from '@/types';
 import { formatOrderDate } from '@/utils/format-date';
 import { Switch } from '@/components/ui/switch';
 
+import {
+	Table,
+	TableBody,
+	TableCaption,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from '@/components/ui/table';
+
 export default function Bookings() {
 	const [loading, setLoading] = useState<boolean>(true);
 	const [orders, setOrders] = useState<OrderProps[]>([]);
 	const [rooms, setRooms] = useState<RoomProps[]>([]);
-	const [bookingUi, setBookingUi] = useState<string>('recentBookings');
+	const [bookingUi, setBookingUi] = useState<string>('availableRooms');
 	const [error, setError] = useState<string>('');
 	const [roomNumber, setRoomNubmer] = useState<string>('');
 	const [maxOccupancy, setmaxOccupancy] = useState<number | undefined>(2);
@@ -132,15 +142,6 @@ export default function Bookings() {
 				{/* Buttons */}
 				<div className="flex gap-2 w-full border p-4  md:gap-6 rounded-lg mt-4">
 					<button
-						onClick={() => setBookingUi('recentBookings')}
-						className={`p-2  rounded-lg w-fit ${
-							bookingUi === 'recentBookings'
-								? 'bg-slate-800 text-slate-100'
-								: 'bg-slate-100 text-slate-800'
-						}`}>
-						Recent bookings
-					</button>
-					<button
 						onClick={() => setBookingUi('availableRooms')}
 						className={`p-2  rounded-lg w-fit ${
 							bookingUi === 'availableRooms'
@@ -148,6 +149,15 @@ export default function Bookings() {
 								: 'bg-slate-100 text-slate-800'
 						}`}>
 						Available Rooms
+					</button>
+					<button
+						onClick={() => setBookingUi('recentBookings')}
+						className={`p-2  rounded-lg w-fit ${
+							bookingUi === 'recentBookings'
+								? 'bg-slate-800 text-slate-100'
+								: 'bg-slate-100 text-slate-800'
+						}`}>
+						Recent bookings
 					</button>
 					<button
 						onClick={() => setBookingUi('addNewRoom')}
@@ -160,6 +170,32 @@ export default function Bookings() {
 					</button>
 				</div>
 				{/* Recent Bookings */}
+				{bookingUi === 'recentBookings' && (
+					<div className="w-full mt-2 overflow-y-auto max-h-[40vh]">
+						<Table>
+							<TableCaption>A list of your recent bookings.</TableCaption>
+							<TableHeader>
+								<TableRow>
+									<TableHead className="w-[100px]">Name</TableHead>
+									<TableHead>Room No.</TableHead>
+									<TableHead>Check In</TableHead>
+									<TableHead>Check Out</TableHead>
+									<TableHead className="text-right">Status</TableHead>
+								</TableRow>
+							</TableHeader>
+
+							<TableBody>
+								<TableRow>
+									<TableCell className="font-medium">INV001</TableCell>
+									<TableCell>Paid</TableCell>
+									<TableCell>Credit Card</TableCell>
+									<TableCell className="text-right">$250.00</TableCell>
+								</TableRow>
+							</TableBody>
+						</Table>
+					</div>
+				)}
+
 				{bookingUi === 'recentBookings' && (
 					<ul className="w-full mt-2 overflow-y-auto max-h-[40vh]">
 						<li className="flex p-3 my-2 text-sm  justify-between border border-b-2 border-b-black rounded-lg items-center">

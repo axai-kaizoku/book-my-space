@@ -49,4 +49,6 @@ export interface OrderProps {
 	checkIn: Date;
 	checkOut: Date;
 	status: string;
+	createdAt: Date;
+	updatedAt: Date;
 }
