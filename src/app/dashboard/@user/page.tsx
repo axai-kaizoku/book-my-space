@@ -74,7 +74,7 @@ export default function UserDashboard() {
 										</TableRow>
 									</TableHeader>
 									<TableBody>
-										{true ? (
+										{loading ? (
 											<TableCaption
 												aria-colspan={5}
 												className="w-full flex justify-center items-center ">
